@@ -24,7 +24,6 @@ A complete machine learning project that uses real Formula 1 data from the 2022,
 - [Installation](#-installation)
 - [How to Run](#-how-to-run)
 - [Project Structure](#-project-structure)
-- [Course Details](#-course-details)
 - [Acknowledgements](#-acknowledgements)
 
 ---
