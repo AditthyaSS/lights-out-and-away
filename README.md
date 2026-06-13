@@ -325,15 +325,6 @@ lights-out-and-away/
 
 ---
 
-## 🎓 Course Details
-
-- **Course:** Fundamentals of AI/ML
-- **Project Title:** Lights Out and Away — Predicting F1 Race Winners and Pit Stop Durations using Supervised Machine Learning
-- **Algorithms:** Linear Regression, K-Nearest Neighbors
-- **Language:** Python 3.10+
-
----
-
 ## 🙏 Acknowledgements
 
 - **[FastF1](https://docs.fastf1.dev/)** — The incredible Python library that makes F1 data accessible
