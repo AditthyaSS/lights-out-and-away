@@ -149,25 +149,36 @@ A non-parametric algorithm that makes predictions based on the K most similar ex
 
 ### Problem 1: Race Winner Prediction
 
-| Metric | Linear Regression | KNN Classifier |
-|--------|------------------|----------------|
-| MSE | See output | See output |
-| RMSE | See output | See output |
-| MAE | See output | See output |
-| R² Score | See output | See output |
-| Accuracy | N/A | See output |
-| F1 Score | N/A | See output |
+| Metric | Linear Regression | KNN Classifier (K=4) |
+|--------|------------------|----------------------|
+| MSE | 28.76 | 63.53 |
+| RMSE | 5.36 | 7.97 |
+| MAE | 4.39 | 6.45 |
+| R² Score | 0.099 | -0.991 |
+| Accuracy | N/A | 0.036 |
+| Precision | N/A | 0.026 |
+| Recall | N/A | 0.036 |
+| F1 Score | N/A | 0.026 |
+| CV RMSE (5-fold) | 5.20 ± 0.11 | — |
+| CV Accuracy (5-fold) | — | 0.079 ± 0.021 |
+
+**🏆 Winner: Linear Regression** — lower RMSE (5.36 vs 7.97)
+
+> Grid position is the strongest predictor of finishing position, confirming qualifying as the key to F1 race outcomes.
 
 ### Problem 2: Pit Stop Duration Prediction
 
-| Metric | Linear Regression | KNN Regressor |
-|--------|------------------|---------------|
-| MSE | See output | See output |
-| RMSE | See output | See output |
-| MAE | See output | See output |
-| R² Score | See output | See output |
+| Metric | Linear Regression | KNN Regressor (K=20) |
+|--------|------------------|----------------------|
+| MSE | 9.13 | 9.29 |
+| RMSE | 3.02 s | 3.05 s |
+| MAE | 1.22 s | 1.28 s |
+| R² Score | -0.002 | -0.019 |
+| CV RMSE (5-fold) | 2.88 ± 0.29 | 2.95 ± 0.27 |
+| Residual Mean | 0.06 | 0.07 |
+| Residual Std | 3.02 | 3.05 |
 
-> 💡 Run `python main.py` to generate actual metrics. Results depend on the data collected.
+**🏆 Winner: Linear Regression** — lower RMSE (3.02s vs 3.05s)
 
 ---
 

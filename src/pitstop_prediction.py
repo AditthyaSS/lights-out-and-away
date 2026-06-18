@@ -44,7 +44,7 @@ def train_pitstop_prediction():
     Returns:
         dict: All results including predictions, metrics, and CV scores
     """
-    print("\n   ⏱️  Problem 2: Pit Stop Duration Prediction")
+    print("\n   [P2] Problem 2: Pit Stop Duration Prediction")
     print("   " + "=" * 50)
 
     # ── Load processed data ──────────────────────────────────

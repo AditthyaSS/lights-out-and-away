@@ -1,5 +1,5 @@
 # ============================================================
-# Lights Out and Away — F1 ML Project
+# Lights Out and Away - F1 ML Project
 # src/report_generator.py
 #
 # Generates a professional PDF report using FPDF2 with F1 theming.
@@ -247,8 +247,8 @@ def generate_report(winner_results=None, pitstop_results=None):
         ("Chapter 2", "Dataset Description"),
         ("Chapter 3", "Data Preprocessing"),
         ("Chapter 4", "Exploratory Data Analysis"),
-        ("Chapter 5", "Problem 1 — Race Winner Prediction"),
-        ("Chapter 6", "Problem 2 — Pit Stop Duration Prediction"),
+        ("Chapter 5", "Problem 1 - Race Winner Prediction"),
+        ("Chapter 6", "Problem 2 - Pit Stop Duration Prediction"),
         ("Chapter 7", "Algorithm Comparison"),
         ("Chapter 8", "Conclusion and Future Work"),
         ("", "References"),
@@ -264,7 +264,7 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.cell(0, 8, f"{title} {dots}", new_x="LMARGIN", new_y="NEXT")
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 1 — INTRODUCTION
+    # CHAPTER 1 - INTRODUCTION
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
@@ -307,7 +307,7 @@ def generate_report(winner_results=None, pitstop_results=None):
     )
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 2 — DATASET DESCRIPTION
+    # CHAPTER 2 - DATASET DESCRIPTION
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
@@ -351,7 +351,7 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.add_plot(path, caption)
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 3 — DATA PREPROCESSING
+    # CHAPTER 3 - DATA PREPROCESSING
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
@@ -410,7 +410,7 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.add_plot(path, caption)
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 4 — EXPLORATORY DATA ANALYSIS
+    # CHAPTER 4 - EXPLORATORY DATA ANALYSIS
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
@@ -435,12 +435,12 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.add_plot(path, caption)
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 5 — WINNER PREDICTION
+    # CHAPTER 5 - WINNER PREDICTION
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
     pdf.f1_page_background()
-    pdf.chapter_title("Problem 1 — Race Winner Prediction")
+    pdf.chapter_title("Problem 1 - Race Winner Prediction")
 
     pdf.section_title("Problem Definition")
     pdf.body_text(
@@ -502,12 +502,12 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.add_plot(path, caption)
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 6 — PIT STOP PREDICTION
+    # CHAPTER 6 - PIT STOP PREDICTION
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
     pdf.f1_page_background()
-    pdf.chapter_title("Problem 2 — Pit Stop Duration Prediction")
+    pdf.chapter_title("Problem 2 - Pit Stop Duration Prediction")
 
     pdf.section_title("Problem Definition")
     pdf.body_text(
@@ -568,7 +568,7 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.add_plot(path, caption)
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 7 — ALGORITHM COMPARISON
+    # CHAPTER 7 - ALGORITHM COMPARISON
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
@@ -631,7 +631,7 @@ def generate_report(winner_results=None, pitstop_results=None):
         pdf.add_plot(path, caption)
 
     # ══════════════════════════════════════════════════════════
-    # CHAPTER 8 — CONCLUSION
+    # CHAPTER 8 - CONCLUSION
     # ══════════════════════════════════════════════════════════
 
     pdf.add_page()
@@ -688,14 +688,14 @@ def generate_report(winner_results=None, pitstop_results=None):
     pdf.ln(10)
 
     references = [
-        "[1] FastF1 Python Library — https://docs.fastf1.dev/",
-        "[2] Scikit-learn: Machine Learning in Python — https://scikit-learn.org/",
-        "[3] Matplotlib: Visualization with Python — https://matplotlib.org/",
-        "[4] Pandas: Python Data Analysis Library — https://pandas.pydata.org/",
-        "[5] Formula 1 Official Website — https://www.formula1.com/",
-        "[6] Seaborn: Statistical Data Visualization — https://seaborn.pydata.org/",
-        "[7] FPDF2: PDF Generation Library — https://py-pdf.github.io/fpdf2/",
-        "[8] NumPy: Scientific Computing — https://numpy.org/",
+        "[1] FastF1 Python Library - https://docs.fastf1.dev/",
+        "[2] Scikit-learn: Machine Learning in Python - https://scikit-learn.org/",
+        "[3] Matplotlib: Visualization with Python - https://matplotlib.org/",
+        "[4] Pandas: Python Data Analysis Library - https://pandas.pydata.org/",
+        "[5] Formula 1 Official Website - https://www.formula1.com/",
+        "[6] Seaborn: Statistical Data Visualization - https://seaborn.pydata.org/",
+        "[7] FPDF2: PDF Generation Library - https://py-pdf.github.io/fpdf2/",
+        "[8] NumPy: Scientific Computing - https://numpy.org/",
         "[9] Hastie, T., Tibshirani, R., & Friedman, J. (2009). The Elements of "
         "Statistical Learning. Springer.",
         "[10] James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). An "
@@ -722,6 +722,6 @@ def generate_report(winner_results=None, pitstop_results=None):
 # ── Standalone execution ─────────────────────────────────────
 
 if __name__ == "__main__":
-    print("\n📄 LIGHTS OUT AND AWAY — Generating Report\n")
+    print("\n📄 LIGHTS OUT AND AWAY - Generating Report\n")
     generate_report()
     print("\n✅ Report generation complete!")

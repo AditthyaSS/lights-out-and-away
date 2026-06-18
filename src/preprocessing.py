@@ -198,6 +198,9 @@ def engineer_features(race_df, pitstop_df, weather_df, tyre_df):
     - TyreAge: laps on current tyre at pit stop
     - Merge weather data into race and pit stop data
 
+    Handles the case where weather columns may already exist in the
+    race_df (e.g., when synthetic data is used).
+
     Args:
         race_df: Cleaned race results DataFrame
         pitstop_df: Cleaned pit stop DataFrame
@@ -215,7 +218,8 @@ def engineer_features(race_df, pitstop_df, weather_df, tyre_df):
     # IsWinner flag
     race_df["IsWinner"] = (race_df["Position"] == 1).astype(int)
 
-    # Merge weather data into race results
+    # Build aggregated weather for merging
+    weather_agg = None
     if not weather_df.empty:
         weather_agg = weather_df.groupby(["Year", "Race"]).agg({
             "AirTemp": "mean",
@@ -225,21 +229,27 @@ def engineer_features(race_df, pitstop_df, weather_df, tyre_df):
             "WindSpeed": "mean",
         }).reset_index()
 
-        race_df = race_df.merge(
-            weather_agg, on=["Year", "Race"], how="left"
-        )
-    else:
-        race_df["AirTemp"] = 25.0
-        race_df["TrackTemp"] = 35.0
-        race_df["Humidity"] = 50.0
-        race_df["Rainfall"] = 0
-        race_df["WindSpeed"] = 5.0
+    # Merge weather into race_df only if weather columns don't already exist
+    weather_cols = ["AirTemp", "TrackTemp", "Humidity", "Rainfall", "WindSpeed"]
+    existing_weather = [c for c in weather_cols if c in race_df.columns]
+
+    if len(existing_weather) < len(weather_cols):
+        # Missing some weather columns — merge from weather_agg
+        if weather_agg is not None:
+            # Drop any columns that would duplicate before merging
+            merge_weather = weather_agg[[c for c in weather_agg.columns
+                                         if c not in existing_weather or c in ("Year", "Race")]]
+            race_df = race_df.merge(merge_weather, on=["Year", "Race"], how="left")
+        else:
+            for col, default in [("AirTemp", 25.0), ("TrackTemp", 35.0),
+                                  ("Humidity", 50.0), ("Rainfall", 0), ("WindSpeed", 5.0)]:
+                if col not in race_df.columns:
+                    race_df[col] = default
 
     # Calculate average pit stops per race
     if not pitstop_df.empty:
         avg_pits = pitstop_df.groupby(["Year", "Race"])["Driver"].count().reset_index()
         avg_pits.columns = ["Year", "Race", "TotalPitStops"]
-        # Average per driver (roughly 20 drivers per race)
         avg_pits["AvgPitStops"] = avg_pits["TotalPitStops"] / 20.0
         race_df = race_df.merge(
             avg_pits[["Year", "Race", "AvgPitStops"]],
@@ -273,14 +283,19 @@ def engineer_features(race_df, pitstop_df, weather_df, tyre_df):
     pitstop_df = pitstop_df.copy()
 
     if not pitstop_df.empty:
-        # Merge weather into pit stop data
-        if not weather_df.empty:
+        # Only merge weather if columns don't already exist in pitstop_df
+        pit_weather_existing = [c for c in ["AirTemp", "TrackTemp"] if c in pitstop_df.columns]
+        if len(pit_weather_existing) < 2 and weather_agg is not None:
+            cols_to_merge = ["Year", "Race"] + [
+                c for c in ["AirTemp", "TrackTemp"] if c not in pitstop_df.columns
+            ]
             pitstop_df = pitstop_df.merge(
-                weather_agg, on=["Year", "Race"], how="left"
+                weather_agg[cols_to_merge], on=["Year", "Race"], how="left"
             )
-        else:
-            pitstop_df["AirTemp"] = 25.0
-            pitstop_df["TrackTemp"] = 35.0
+        elif len(pit_weather_existing) < 2:
+            for col, default in [("AirTemp", 25.0), ("TrackTemp", 35.0)]:
+                if col not in pitstop_df.columns:
+                    pitstop_df[col] = default
 
         # Fill NaN
         pitstop_df["AirTemp"] = pitstop_df["AirTemp"].fillna(25.0)
@@ -289,7 +304,7 @@ def engineer_features(race_df, pitstop_df, weather_df, tyre_df):
         # Rename TyreLife to TyreAge for clarity
         if "TyreLife" in pitstop_df.columns:
             pitstop_df.rename(columns={"TyreLife": "TyreAge"}, inplace=True)
-        else:
+        elif "TyreAge" not in pitstop_df.columns:
             pitstop_df["TyreAge"] = 15  # default
 
         pitstop_df["TyreAge"] = pitstop_df["TyreAge"].fillna(15)

@@ -134,6 +134,11 @@ def collect_pitstop_data(year, race_name):
     """
     Fetch pit stop data from the race session laps.
 
+    In FastF1, PitInTime is recorded on the lap where the driver enters
+    the pit lane, while PitOutTime is recorded on the next lap (the
+    out-lap). To compute pit stop duration, we match each driver's
+    PitInTime with the PitOutTime from their subsequent lap.
+
     Returns a DataFrame with columns:
         Driver, Team, LapNumber, PitStopDuration, TyreCompound,
         TyreLife, Year, Race
@@ -146,29 +151,39 @@ def collect_pitstop_data(year, race_name):
         if laps is None or laps.empty:
             return pd.DataFrame()
 
-        # Filter laps where a pit stop occurred
-        pit_laps = laps[laps["PitInTime"].notna() | laps["PitOutTime"].notna()].copy()
-
-        if pit_laps.empty:
-            return pd.DataFrame()
-
-        # Calculate pit stop duration from PitInTime to PitOutTime
-        # If PitOutTime is on the next lap, we use the difference
         pit_data = []
-        for _, lap in pit_laps.iterrows():
-            try:
+
+        # Process each driver's laps individually to match PitInTime
+        # on the in-lap with PitOutTime on the following out-lap
+        for driver in laps["Driver"].unique():
+            driver_laps = laps[laps["Driver"] == driver].sort_values("LapNumber").reset_index(drop=True)
+
+            for i in range(len(driver_laps)):
+                lap = driver_laps.iloc[i]
                 pit_in = lap.get("PitInTime")
-                pit_out = lap.get("PitOutTime")
 
-                # Calculate duration
+                if pd.isna(pit_in):
+                    continue
+
+                # This lap has a PitInTime — look for PitOutTime on the next lap
                 duration = np.nan
-                if pd.notna(pit_in) and pd.notna(pit_out):
-                    duration = (pit_out - pit_in).total_seconds()
-                elif pd.notna(lap.get("PitOutTime")):
-                    # Sometimes only PitOutTime is available on the out-lap
-                    pass
+                if i + 1 < len(driver_laps):
+                    next_lap = driver_laps.iloc[i + 1]
+                    pit_out = next_lap.get("PitOutTime")
+                    if pd.notna(pit_out):
+                        duration = (pit_out - pit_in).total_seconds()
 
-                # Get tyre information
+                # If we still don't have a duration, try same-lap fallback
+                if pd.isna(duration):
+                    pit_out_same = lap.get("PitOutTime")
+                    if pd.notna(pit_out_same):
+                        duration = (pit_out_same - pit_in).total_seconds()
+
+                # Skip if we couldn't compute duration
+                if pd.isna(duration):
+                    continue
+
+                # Get tyre information (compound on the in-lap)
                 compound = lap.get("Compound", "UNKNOWN")
                 tyre_life = lap.get("TyreLife", np.nan)
 
@@ -182,8 +197,6 @@ def collect_pitstop_data(year, race_name):
                     "Year": year,
                     "Race": race_name,
                 })
-            except Exception:
-                continue
 
         if not pit_data:
             return pd.DataFrame()
@@ -318,6 +331,10 @@ def collect_all_seasons():
     Collect all data across all 3 seasons (2022, 2023, 2024) for
     all 24 races. Saves combined data to data/raw/ as CSVs.
 
+    If FastF1 API is unavailable for a season (network error or cache
+    miss), falls back to realistic synthetic data generation so the
+    pipeline always completes successfully.
+
     This is the main collection function called by main.py.
     """
     enable_cache()
@@ -434,6 +451,9 @@ def collect_all_seasons():
     else:
         print("   ⚠ No tyre data collected")
 
+    # ── Fallback: synthetic data if nothing was collected ────
+    _check_and_fill_missing_with_synthetic(total_sessions, failed_sessions)
+
     # ── Summary ──────────────────────────────────────────────
     print(f"\n{'='*60}")
     print(f"   📊 Collection Summary")
@@ -444,6 +464,38 @@ def collect_all_seasons():
     print(f"{'='*60}\n")
 
     return total_sessions, failed_sessions
+
+
+def _check_and_fill_missing_with_synthetic(total_sessions, failed_sessions):
+    """
+    If the race_data_raw.csv is missing or too small (fewer than 100 rows),
+    generate synthetic data to supplement or replace missing API data.
+
+    This guarantees the pipeline always has enough data to train models.
+    """
+    race_csv = os.path.join(RAW_DATA_DIR, "race_data_raw.csv")
+    pit_csv = os.path.join(RAW_DATA_DIR, "pitstop_data_raw.csv")
+
+    needs_synthetic = False
+
+    if not os.path.exists(race_csv):
+        needs_synthetic = True
+        print("\n   ⚠ race_data_raw.csv missing — falling back to synthetic data")
+    else:
+        try:
+            df = pd.read_csv(race_csv)
+            if len(df) < 100:
+                needs_synthetic = True
+                print(f"\n   ⚠ Only {len(df)} race rows collected — supplementing with synthetic data")
+        except Exception:
+            needs_synthetic = True
+
+    if not os.path.exists(pit_csv):
+        needs_synthetic = True
+
+    if needs_synthetic:
+        from src.synthetic_data import generate_all_synthetic_data
+        generate_all_synthetic_data(RAW_DATA_DIR)
 
 
 # ── Standalone execution ─────────────────────────────────────

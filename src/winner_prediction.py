@@ -49,7 +49,7 @@ def train_winner_prediction():
     Returns:
         dict: All results including predictions, metrics, and CV scores
     """
-    print("\n   🏆 Problem 1: Race Winner Prediction")
+    print("\n   [P1] Problem 1: Race Winner Prediction")
     print("   " + "=" * 50)
 
     # ── Load processed data ──────────────────────────────────
