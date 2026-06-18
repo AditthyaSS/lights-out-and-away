@@ -184,45 +184,88 @@ A non-parametric algorithm that makes predictions based on the K most similar ex
 
 ## 🎨 Visualizations
 
-All 26+ visualizations are generated with a custom F1 theme:
-- **Background:** `#1a1a2e` (dark navy)
-- **Primary:** `#e8002d` (F1 red)
-- **Secondary:** `#ffffff` (white)
-- **Accent:** `#ff7c43` (orange)
+All 26+ visualizations use a custom F1 dark-navy theme with official team and tyre colors.
 
-### Data Overview
-1. Race Calendar Heatmap
-2. Driver Performance Radar Chart
-3. Team Performance Bar Chart
-4. Circuit Difficulty Chart
-5. Tyre Compound Usage Pie Chart
+### 🗓️ Race Calendar — Data Overview
+![Race Calendar Heatmap](docs/images/01_race_calendar_heatmap.png)
+*All 24 races across 3 seasons colored by data points collected*
 
-### Winner Prediction
-6. Feature Correlation Heatmap
-7. Grid vs Finishing Position Scatter
-8. LR Actual vs Predicted
-9. KNN Confusion Matrix
-10. KNN Accuracy vs K Value
-11. Algorithm Comparison Bar Chart
-12. Top 10 Predicted Winners
-13. Driver Win Probability Heatmap
+### 🏆 Constructor Championship Points
+![Team Performance](docs/images/03_team_performance.png)
+*Total points per constructor 2022–2024, colored by official team colors*
 
-### Pit Stop Prediction
-14. Pit Stop Duration Violin Plot by Team
-15. Pit Stop vs Lap Number Scatter
-16. LR Actual vs Predicted with Confidence Bands
-17. KNN Actual vs Predicted
-18. Residual Comparison
-19. Algorithm Comparison Bar Chart
-20. Pit Stop by Circuit Boxplot
-21. Tyre Compound vs Pit Stop Violin
-22. Team Pit Stop Ranking
+### 🏎️ Driver Performance Radar
+![Driver Radar](docs/images/02_driver_radar_chart.png)
+*Top 10 drivers across wins, podiums, points, and races*
 
-### Advanced
-23. Learning Curves
-24. Cross-Validation Score Distribution
-25. Feature Importance Ranking
-26. Season Comparison
+### 📍 Grid Position vs Finishing Position
+![Grid vs Finish](docs/images/07_grid_vs_finish.png)
+*Strong correlation between qualifying and race result — key ML insight*
+
+### 📐 Linear Regression — Actual vs Predicted (Race Winner)
+![LR Winner](docs/images/08_lr_actual_vs_predicted_winner.png)
+*Linear Regression predictions vs actual finishing positions*
+
+### 🔍 KNN Confusion Matrix
+![KNN Confusion Matrix](docs/images/09_knn_confusion_matrix.png)
+*KNN classifier performance across finishing positions (top 10)*
+
+### ⚖️ Algorithm Comparison — Race Winner Prediction
+![Algorithm Comparison Winner](docs/images/11_algorithm_comparison_winner.png)
+*LR vs KNN side-by-side on MSE, RMSE, MAE, R²*
+
+### 🔧 Pit Stop Duration by Team (Violin Plot)
+![Pit Stop Violin](docs/images/14_pitstop_violin_by_team.png)
+*Distribution of pit stop durations per team, colored by team colors*
+
+### 📉 Residual Analysis — Pit Stop Prediction
+![Residual Comparison](docs/images/18_residual_comparison_pitstop.png)
+*LR and KNN residual plots for pit stop duration prediction*
+
+### ⚖️ Algorithm Comparison — Pit Stop Duration
+![Algorithm Comparison Pitstop](docs/images/19_algorithm_comparison_pitstop.png)
+*LR vs KNN on RMSE, MAE, R² for pit stop duration*
+
+### 📈 Learning Curves
+![Learning Curves](docs/images/23_learning_curves.png)
+*How model performance improves with more training data*
+
+### 🏅 Feature Importance
+![Feature Importance](docs/images/25_feature_importance.png)
+*Which features matter most — GridPosition dominates*
+
+---
+
+### Full List of All 26 Plots
+
+| # | Plot | Problem |
+|---|------|---------|
+| 1 | Race Calendar Heatmap | Data Overview |
+| 2 | Driver Performance Radar | Data Overview |
+| 3 | Team Performance Bar Chart | Data Overview |
+| 4 | Circuit Difficulty Chart | Data Overview |
+| 5 | Tyre Compound Usage Pie | Data Overview |
+| 6 | Feature Correlation Heatmap | Problem 1 |
+| 7 | Grid vs Finishing Position Scatter | Problem 1 |
+| 8 | LR Actual vs Predicted | Problem 1 |
+| 9 | KNN Confusion Matrix | Problem 1 |
+| 10 | KNN Accuracy vs K Value | Problem 1 |
+| 11 | Algorithm Comparison (Winner) | Problem 1 |
+| 12 | Top 10 Predicted Winners | Problem 1 |
+| 13 | Driver Win Probability Heatmap | Problem 1 |
+| 14 | Pit Stop Violin by Team | Problem 2 |
+| 15 | Pit Stop vs Lap Number Scatter | Problem 2 |
+| 16 | LR Actual vs Predicted (Pit Stop) | Problem 2 |
+| 17 | KNN Actual vs Predicted (Pit Stop) | Problem 2 |
+| 18 | Residual Analysis | Problem 2 |
+| 19 | Algorithm Comparison (Pit Stop) | Problem 2 |
+| 20 | Pit Stop by Circuit Boxplot | Problem 2 |
+| 21 | Tyre Compound vs Pit Stop Violin | Problem 2 |
+| 22 | Team Pit Stop Ranking | Problem 2 |
+| 23 | Learning Curves | Advanced |
+| 24 | Cross-Validation Score Distribution | Advanced |
+| 25 | Feature Importance Ranking | Advanced |
+| 26 | Season Comparison | Advanced |
 
 ---
 
